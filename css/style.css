@@ -1,0 +1,199 @@
+/* Генератор договоров — интерфейс. Mobile-first: форма должна работать с телефона. */
+
+:root {
+  --bg: #f4f5f7;
+  --card: #ffffff;
+  --line: #dfe3e8;
+  --text: #1c1f23;
+  --muted: #6b7280;
+  --auto: #d8f0bd;          /* салатовый: значение проставлено автоматически */
+  --auto-line: #a8d47c;
+  --bad: #ffd5d5;           /* алый: обязательное поле не заполнено */
+  --bad-line: #e04545;
+  --accent: #2f6fed;
+  --red: #d93b3b;
+  --green: #2e9e57;
+  --warn: #fff4d6;
+  --warn-line: #e0b640;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 16px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* ---------- экран пароля ---------- */
+.gate {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.gate__box {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 28px 24px;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, .06);
+}
+.gate__title { margin: 0 0 20px; font-size: 20px; line-height: 1.3; }
+.gate__label { display: block; font-size: 14px; color: var(--muted); margin-bottom: 6px; }
+.gate__input {
+  width: 100%;
+  font-size: 18px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  margin-bottom: 14px;
+}
+.gate__error { color: var(--red); font-size: 14px; margin: 10px 0 0; }
+
+/* ---------- форма ---------- */
+.app { max-width: 900px; margin: 0 auto; padding: 16px 14px 60px; }
+.form {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 20px 18px;
+}
+.form__title { margin: 0 0 4px; font-size: 22px; line-height: 1.25; }
+.form__subtitle {
+  margin: 24px 0 12px;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--muted);
+}
+.divider { border: 0; border-top: 1px solid var(--line); margin: 20px 0; }
+
+.row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 12px; }
+.row__label { flex: 0 0 190px; font-size: 15px; }
+.row__field { flex: 1 1 220px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.row--total .row__label { font-weight: 600; }
+
+.input {
+  font: inherit;
+  padding: 9px 10px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: #fff;
+  color: inherit;
+  min-width: 0;
+  flex: 1 1 140px;
+}
+.input--tiny  { flex: 0 0 64px; text-align: center; }
+.input--small { flex: 0 0 120px; }
+.input--wide  { flex: 1 1 100%; }
+.input--area  { flex: 1 1 100%; resize: vertical; font-size: 15px; }
+.input--ro    { background: #fbfdf8; }
+.input--auto  { background: var(--auto); border-color: var(--auto-line); }
+.input--manual{ background: #fff; border-color: var(--accent); }
+.input--bad   { background: var(--bad); border-color: var(--bad-line); }
+.input:focus  { outline: 2px solid var(--accent); outline-offset: -1px; }
+
+.suffix { color: var(--muted); font-size: 14px; white-space: nowrap; }
+.hint { color: var(--muted); font-size: 12px; flex: 1 1 100%; }
+
+/* ---------- услуги ---------- */
+.svc {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  background: #fcfcfd;
+}
+.svc--on { background: #fff; border-color: #c9d6f5; }
+.svc--warn { border-color: var(--warn-line); background: var(--warn); }
+.svc__head { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 16px; }
+.svc__cb { width: 20px; height: 20px; accent-color: var(--accent); flex: 0 0 auto; }
+.svc__body { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 10px 18px; }
+
+.fld { display: flex; align-items: center; gap: 6px; }
+.fld--wide { flex: 1 1 100%; flex-wrap: wrap; }
+.fld__lbl { font-size: 14px; color: var(--muted); min-width: 62px; }
+
+.edit {
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--muted);
+  flex: 0 0 auto;
+}
+.edit--on { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+/* ---------- ошибки и предупреждения ---------- */
+.combo-error {
+  background: var(--bad);
+  border: 1px solid var(--bad-line);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+  margin: 4px 0 0;
+}
+.warnings {
+  background: var(--warn);
+  border: 1px solid var(--warn-line);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+  white-space: pre-line;
+  margin: 12px 0 0;
+}
+
+/* ---------- кнопки ---------- */
+.actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 22px; }
+.btn {
+  font: inherit;
+  font-weight: 600;
+  padding: 12px 20px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: #fff;
+  cursor: pointer;
+  color: inherit;
+}
+.btn--primary { background: var(--accent); border-color: var(--accent); color: #fff; width: 100%; }
+.btn--make { color: #fff; }
+.btn--invalid { background: var(--red); border-color: var(--red); }
+.btn--valid { background: var(--green); border-color: var(--green); }
+.actions__msg { font-size: 14px; color: var(--muted); }
+
+/* ---------- предпросмотр ---------- */
+.result {
+  margin-top: 22px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px;
+}
+.result__bar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+.result__hint { font-size: 13px; color: var(--muted); flex: 1 1 100%; }
+.preview { overflow: hidden; background: #e9ebee; border-radius: 10px; padding: 0; }
+.preview .docx-wrapper { background: #e9ebee; padding: 10px 0; }
+.preview .docx-wrapper > section.docx {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .12);
+  margin-bottom: 10px;
+  background: #fff;
+}
+
+@media (max-width: 640px) {
+  .row__label { flex: 1 1 100%; font-weight: 600; font-size: 14px; }
+  .form { padding: 16px 12px; }
+  .app { padding: 10px 8px 48px; }
+  .fld__lbl { min-width: 52px; }
+}

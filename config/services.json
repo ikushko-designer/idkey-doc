@@ -1,0 +1,12 @@
+{
+  "order": ["tech1", "tech2", "threeD", "twoD", "table"],
+  "services": {
+    "tech1":  { "label": "План расстановки мебели", "unit": "m2",   "unitLabel": "р/кв.м",   "amountLabel": "S=", "defaultPrice": 350 },
+    "tech2":  { "label": "Вторая часть технички",   "unit": "m2",   "unitLabel": "р/кв.м",   "amountLabel": "S=", "defaultPrice": 300 },
+    "threeD": { "label": "3D-визуализации",         "unit": "m2",   "unitLabel": "р/кв.м",   "amountLabel": "S=", "defaultPrice": 750 },
+    "twoD":   { "label": "2D-коллажи",              "unit": "view", "unitLabel": "р/ракурс", "amountLabel": "N=", "defaultPrice": 3000 },
+    "table":  { "label": "Таблица комплектации",    "unit": "m2",   "unitLabel": "р/кв.м",   "amountLabel": "S=", "defaultPrice": 200 }
+  },
+  "twoDDefaultOption": "Количество 2D-коллажей – 4 ракурса. Помещения: Кухня-гостиная (2 ракурса), Спальня (1 ракурс), Санузел (1 ракурс)",
+  "twoDDefaultCount": 1
+}

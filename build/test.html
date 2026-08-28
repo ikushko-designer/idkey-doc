@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Regression: 20 комбинаций услуг</title>
+<style>
+  body { font: 14px/1.4 -apple-system, "Segoe UI", Roboto, Arial, sans-serif; margin: 16px; }
+  h1 { font-size: 18px; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { border: 1px solid #ddd; padding: 5px 7px; text-align: left; vertical-align: top; }
+  th { background: #f2f4f7; position: sticky; top: 0; }
+  .ok { background: #e6f7e6; }
+  .fail { background: #ffe3e3; }
+  .sum { font-size: 16px; font-weight: 600; margin: 12px 0; }
+  code { font-size: 12px; }
+</style>
+</head>
+<body>
+<h1>Regression: все 20 сочетаний услуг</h1>
+<p>Площадь 100 кв.м, 4 ракурса для 2D. Проверяется: не осталось незаполненных тегов,
+нужные разделы на месте, лишние вырезаны, и ни одна ссылка не указывает на несуществующий этап.</p>
+<div class="sum" id="summary">выполняется…</div>
+<table id="out"><thead><tr>
+  <th>№</th><th>Услуги</th><th>Этапы в документе</th><th>Проблемы</th>
+</tr></thead><tbody></tbody></table>
+
+<script src="../vendor/pizzip.min.js"></script>
+<script src="../vendor/docxtemplater.js"></script>
+<script src="../js/numberToWords.js"></script>
+<script src="../js/pricing.js"></script>
+<script src="../js/combinations.js"></script>
+<script src="../js/numbering.js"></script>
+<script src="../js/contract.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  /* Опорные фразы: по ним видно, остался раздел в договоре или вырезан. */
+  var MARK = {
+    tech1:  'Документация дизайн-проекта: основные чертежи',
+    tech2:  'Документация дизайн-проекта: дополнительные чертежи',
+    threeD: '3D-визуализации: концептуальное решение',
+    twoD:   '2D-коллажи: финальные рендеры',
+    table:  'Таблица комплектации: подбор материалов'
+  };
+  var MARK_TECH_SECTION = 'для документации';
+  var MARK_VIS_SECTION  = 'для визуальной части';
+
+  function docxToText(blob) {
+    return blob.arrayBuffer().then(function (buf) {
+      var xml = new PizZip(buf).file('word/document.xml').asText();
+      var out = [], re = /<w:p\b[^>]*>([\s\S]*?)<\/w:p>/g, m;
+      while ((m = re.exec(xml))) {
+        /* переводы строк и табы внутри абзаца важны: иначе «Этапа №1.1» склеится
+           с идущим следом «1. Перейти по QR-коду» и номер этапа прочитается неверно */
+        var t = '', rt = /<w:t(?:\s[^>]*)?>([\s\S]*?)<\/w:t>|<w:br\b[^>]*>|<w:tab\b[^>]*>/g, r;
+        while ((r = rt.exec(m[1]))) t += (r[1] !== undefined ? r[1] : ' ');
+        if (t.trim()) out.push(t);
+      }
+      return out.join('\n')
+        .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+        .replace(/ /g, ' ');
+    });
+  }
+
+  function baseState(keys, cfg) {
+    var st = {
+      contractNo: '1', date: new Date(), fio: 'Иванов Иван Иванович',
+      inn: '771234567890', phone: '+7 (909) 980-90-00',
+      address: 'г. Москва, ул. Тестовая, д. 1', area: '100',
+      twoDOption: cfg.twoDDefaultOption, services: {}
+    };
+    cfg.order.forEach(function (k) {
+      st.services[k] = {
+        checked: keys.indexOf(k) >= 0,
+        amount: k === 'twoD' ? '4' : '100',
+        amountManual: k === 'twoD',
+        price: '', priceManual: false, days: '', daysManual: false
+      };
+    });
+    return st;
+  }
+
+  function check(keys, text, stages) {
+    var problems = [];
+
+    if (/\{\{|\}\}/.test(text)) problems.push('в документе остались незаполненные теги');
+
+    Object.keys(MARK).forEach(function (k) {
+      var want = keys.indexOf(k) >= 0;
+      var got = text.indexOf(MARK[k]) >= 0;
+      if (want && !got) problems.push('пропал раздел ' + k);
+      if (!want && got) problems.push('не вырезан раздел ' + k);
+    });
+
+    var wantTech = keys.indexOf('tech1') >= 0 || keys.indexOf('tech2') >= 0;
+    if (wantTech !== (text.indexOf(MARK_TECH_SECTION) >= 0)) {
+      problems.push(wantTech ? 'нет созвона по документации' : 'не вырезан созвон по документации');
+    }
+    var wantVis = keys.indexOf('threeD') >= 0 || keys.indexOf('twoD') >= 0;
+    if (wantVis !== (text.indexOf(MARK_VIS_SECTION) >= 0)) {
+      problems.push(wantVis ? 'нет созвона по визуальной части' : 'не вырезан созвон по визуальной части');
+    }
+
+    /* Объявленные этапы («Этап №X») против ссылок на них («Этапа/Этапов №X») */
+    var defined = {}, m;
+    var NUM = '(\\d+(?:\\.\\d+)?)';
+    var reDef = new RegExp('Этап №' + NUM, 'g');
+    while ((m = reDef.exec(text))) defined[m[1]] = true;
+
+    var reRef = new RegExp('Этап(?:а|ов) №' + NUM, 'g');
+    while ((m = reRef.exec(text))) {
+      if (!defined[m[1]]) problems.push('ссылка на несуществующий Этап №' + m[1]);
+    }
+    /* «Этапов №1.1, 1.2» — второй номер идёт без слова «Этап» */
+    var rePair = new RegExp('Этапов №' + NUM + ', ' + NUM, 'g');
+    while ((m = rePair.exec(text))) {
+      if (!defined[m[2]]) problems.push('ссылка на несуществующий Этап №' + m[2]);
+    }
+
+    var expected = Object.keys(stages).filter(function (k) {
+      return /^S_/.test(k) && stages[k];
+    }).map(function (k) { return stages[k]; }).sort();
+    var actual = Object.keys(defined).sort();
+    if (expected.join(',') !== actual.join(',')) {
+      problems.push('номера этапов: ожидались [' + expected.join(' ') + '], в документе [' + actual.join(' ') + ']');
+    }
+
+    return { problems: problems, stages: actual.join('  ') };
+  }
+
+  Promise.all([
+    fetch('../config/services.json').then(function (r) { return r.json(); }),
+    fetch('../config/term-rules.json').then(function (r) { return r.json(); }),
+    fetch('../config/combinations.json').then(function (r) { return r.json(); })
+  ]).then(function (res) {
+    var cfg = res[0], rules = res[1], combos = res[2].allowed;
+    var tbody = document.querySelector('#out tbody');
+    var failed = 0;
+
+    return combos.reduce(function (chain, keys, i) {
+      return chain.then(function () {
+        var st = baseState(keys, cfg);
+        var calc = window.Pricing.calculate(st, cfg, rules);
+        var data = window.Contract.buildData(st, calc, cfg);
+        var flags = {};
+        cfg.order.forEach(function (k) { flags[k] = keys.indexOf(k) >= 0; });
+        var stages = window.Numbering.build(flags);
+
+        return window.Contract.render('../templates/master_template.docx', data)
+          .then(docxToText)
+          .then(function (text) {
+            var r = check(keys, text, stages);
+            if (r.problems.length) failed++;
+            var tr = document.createElement('tr');
+            tr.className = r.problems.length ? 'fail' : 'ok';
+            tr.innerHTML = '<td>' + (i + 1) + '</td><td>' + keys.join(', ') + '</td>' +
+                           '<td><code>' + r.stages + '</code></td>' +
+                           '<td>' + (r.problems.join('<br>') || 'ок') + '</td>';
+            tbody.appendChild(tr);
+          })
+          .catch(function (e) {
+            failed++;
+            var tr = document.createElement('tr');
+            tr.className = 'fail';
+            tr.innerHTML = '<td>' + (i + 1) + '</td><td>' + keys.join(', ') + '</td><td></td><td>' +
+                           window.Contract.describeError(e) + '</td>';
+            tbody.appendChild(tr);
+          });
+      });
+    }, Promise.resolve()).then(function () {
+      document.getElementById('summary').textContent =
+        failed ? ('ПРОВАЛЕНО комбинаций: ' + failed + ' из ' + combos.length)
+               : ('OK: все ' + combos.length + ' комбинаций собираются корректно');
+      document.getElementById('summary').className = 'sum ' + (failed ? 'fail' : 'ok');
+      window.__testResult = { total: combos.length, failed: failed };
+    });
+  }).catch(function (e) {
+    document.getElementById('summary').textContent = 'Ошибка запуска: ' + e.message;
+    window.__testResult = { total: 0, failed: -1, error: e.message };
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+/* Печать: на бумагу (и в PDF) уходит только предпросмотр договора.
+   Источник вёрстки — сам сгенерированный .docx, отрисованный docx-preview,
+   поэтому здесь нужно лишь убрать интерфейс и экранные отступы. */
+
+/* Поля берутся из самого шаблона (w:pgMar = 10 мм по бокам и снизу).
+   Их обязательно задавать здесь, а не только у страницы предпросмотра:
+   docx-preview отдаёт документ одной длинной секцией, браузер режет её на листы сам,
+   и без @page-полей текст на средних листах упёрся бы в край бумаги. */
+@page {
+  size: A4;
+  margin: 10mm;
+}
+
+.gate,
+.form,
+.result__bar {
+  display: none !important;
+}
+
+html, body {
+  background: #fff !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.app { max-width: none !important; margin: 0 !important; padding: 0 !important; }
+
+.result {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+}
+
+/* Масштаб, которым предпросмотр вписывается в экран телефона, для печати сбрасываем */
+.preview {
+  overflow: visible !important;
+  background: #fff !important;
+  border-radius: 0 !important;
+  height: auto !important;
+  padding: 0 !important;
+}
+.preview .docx-wrapper {
+  transform: none !important;
+  background: #fff !important;
+  padding: 0 !important;
+  display: block !important;
+}
+/* Свои поля и фиксированную высоту листа секция получает инлайн-стилем от docx-preview.
+   На печати их надо снять — иначе поля сложатся с @page, а min-height добавит пустые листы. */
+.preview .docx-wrapper > section.docx {
+  box-shadow: none !important;
+  margin: 0 !important;
+  border: 0 !important;
+  padding: 0 !important;
+  width: auto !important;
+  min-height: 0 !important;
+  height: auto !important;
+}
+.preview .docx-wrapper > section.docx + section.docx {
+  break-before: page;
+  page-break-before: always;
+}
+
+/* Таблицы этапов не должны рваться посреди строки */
+.preview table { break-inside: auto; }
+.preview tr { break-inside: avoid; page-break-inside: avoid; }

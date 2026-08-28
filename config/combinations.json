@@ -1,0 +1,25 @@
+{
+  "_comment": "20 допустимых сочетаний услуг из для_договора.xlsx (строки 9-14, столбцы B..U). Всё, чего здесь нет, форма не пропускает.",
+  "allowed": [
+    ["tech1", "tech2"],
+    ["tech1"],
+    ["tech2"],
+    ["threeD"],
+    ["twoD"],
+    ["table"],
+    ["tech1", "tech2", "threeD"],
+    ["tech1", "threeD"],
+    ["tech2", "threeD"],
+    ["tech1", "tech2", "threeD", "table"],
+    ["tech1", "threeD", "table"],
+    ["tech2", "threeD", "table"],
+    ["tech1", "tech2", "twoD"],
+    ["tech1", "twoD"],
+    ["tech2", "twoD"],
+    ["tech1", "tech2", "twoD", "table"],
+    ["tech1", "twoD", "table"],
+    ["tech2", "twoD", "table"],
+    ["threeD", "table"],
+    ["twoD", "table"]
+  ]
+}

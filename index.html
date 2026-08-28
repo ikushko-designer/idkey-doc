@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Генератор договоров</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/print.css" media="print">
+</head>
+<body>
+
+<section id="gate" class="gate">
+  <form id="gate-form" class="gate__box" autocomplete="off">
+    <h1 class="gate__title">Начинаем наше лудо-приключение</h1>
+    <label class="gate__label" for="gate-pass">Пароль</label>
+    <input class="gate__input" id="gate-pass" type="password" inputmode="numeric" autocomplete="off">
+    <button class="btn btn--primary" type="submit">Войти</button>
+    <p class="gate__error" id="gate-error" hidden>Неверный пароль</p>
+  </form>
+</section>
+
+<main id="app" class="app" hidden>
+  <form id="form" class="form" novalidate>
+    <h1 class="form__title">Начинаем наше лудо-приключение</h1>
+    <h2 class="form__subtitle">Основные данные клиента</h2>
+
+    <div class="row">
+      <label class="row__label" for="f-no">Договор сегодня</label>
+      <div class="row__field row__field--inline">
+        <input class="input input--tiny" id="f-no" type="text" inputmode="numeric" value="1">
+        <span class="suffix">-й</span>
+      </div>
+    </div>
+
+    <div class="row">
+      <label class="row__label" for="f-date">Дата договора</label>
+      <div class="row__field row__field--inline">
+        <span class="suffix">«&nbsp;&nbsp;&nbsp;&nbsp;»</span>
+        <input class="input input--auto" id="f-date" type="text">
+        <span class="hint">число в договоре остаётся пустым — проставляется от руки</span>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="row">
+      <label class="row__label" for="f-fio">ФИО</label>
+      <div class="row__field"><input class="input" id="f-fio" type="text" autocomplete="name"></div>
+    </div>
+
+    <div class="row">
+      <label class="row__label" for="f-inn">ИНН</label>
+      <div class="row__field"><input class="input" id="f-inn" type="text" inputmode="numeric"></div>
+    </div>
+
+    <div class="row">
+      <label class="row__label" for="f-phone">Активная мобила</label>
+      <div class="row__field"><input class="input" id="f-phone" type="tel" inputmode="tel" autocomplete="tel"></div>
+    </div>
+
+    <div class="row">
+      <label class="row__label" for="f-address">Точный адрес объекта</label>
+      <div class="row__field"><input class="input" id="f-address" type="text"></div>
+    </div>
+
+    <div class="row">
+      <label class="row__label" for="f-area">Общая квадратура</label>
+      <div class="row__field row__field--inline">
+        <input class="input input--small" id="f-area" type="text" inputmode="decimal">
+        <span class="suffix">кв.м.</span>
+      </div>
+    </div>
+
+    <h2 class="form__subtitle">Услуги</h2>
+    <div id="services"></div>
+    <p class="combo-error" id="combo-error" hidden></p>
+
+    <hr class="divider">
+
+    <div class="row row--total">
+      <span class="row__label">Общая сумма</span>
+      <div class="row__field"><output class="input input--auto input--ro" id="t-sum">0</output><span class="suffix">₽</span></div>
+    </div>
+    <div class="row row--total">
+      <span class="row__label">Сумма прописью</span>
+      <div class="row__field"><output class="input input--auto input--ro input--wide" id="t-words">Ноль рублей 00 копеек</output></div>
+    </div>
+    <div class="row row--total">
+      <span class="row__label">Общий срок</span>
+      <div class="row__field"><output class="input input--auto input--ro" id="t-days">0</output><span class="suffix">раб. дней</span></div>
+    </div>
+
+    <p class="warnings" id="warnings" hidden></p>
+
+    <div class="actions">
+      <button class="btn btn--make btn--invalid" id="make" type="submit">Составить договор</button>
+      <span class="actions__msg" id="make-msg"></span>
+    </div>
+  </form>
+
+  <section class="result" id="result" hidden>
+    <div class="result__bar">
+      <button class="btn" id="dl-word" type="button">Скачать Word</button>
+      <button class="btn" id="dl-pdf" type="button">Скачать PDF</button>
+      <span class="result__hint" id="pdf-hint"></span>
+    </div>
+    <div class="preview" id="preview"></div>
+  </section>
+</main>
+
+<script src="vendor/pizzip.min.js"></script>
+<script src="vendor/docxtemplater.js"></script>
+<script src="vendor/jszip.min.js"></script>
+<script src="vendor/docx-preview.min.js"></script>
+<script src="js/numberToWords.js"></script>
+<script src="js/pricing.js"></script>
+<script src="js/combinations.js"></script>
+<script src="js/numbering.js"></script>
+<script src="js/contract.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
