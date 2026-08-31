@@ -14,13 +14,8 @@
         { "min": 300, "max": 500, "days": 20 },
         { "min": 500, "max": 700, "days": 30 },
         { "min": 700, "max": 900, "days": 35 },
-        { "min": 900, "max": 1200, "days": 40 }
-    ]
-},
-
-"tech2": {
-    "unit": "m2",
-    "tiers": [
+        { "min": 900, "max": 1200, "days": 40 }]},
+"tech2": {"unit": "m2","tiers": [
         { "min": 0, "max": 20, "days": 5 },
         { "min": 20, "max": 50, "days": 7 },
         { "min": 50, "max": 80, "days": 9 },
@@ -30,12 +25,8 @@
         { "min": 300, "max": 500, "days": 20 },
         { "min": 500, "max": 700, "days": 30 },
         { "min": 700, "max": 900, "days": 35 },
-        { "min": 900, "max": 1200, "days": 40 }
-    ]
-},
-"threeD": {
-    "unit": "m2",
-    "tiers": [
+        { "min": 900, "max": 1200, "days": 40 }]},
+"threeD": {"unit": "m2","tiers": [
         { "min": 0, "max": 20, "days": 7 },
         { "min": 20, "max": 30, "days": 8 },
         { "min": 30, "max": 40, "days": 9 },
@@ -54,7 +45,6 @@
         { "min": 600, "max": 1200, "days": 75 }
     ]
 },
-
 "table": {
     "unit": "m2",
     "tiers": [
@@ -68,7 +58,6 @@
         { "min": 600, "max": 1200, "days": 30 }
     ]
 },
-
 "twoD": {
     "unit": "view",
     "tiers": [
