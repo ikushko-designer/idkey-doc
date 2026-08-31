@@ -1,11 +1,92 @@
 {
-  "_comment": "Источник: для_договора.xlsx, лист «Лист1». Для площади (m2) диапазоны перекрываются в точках 10 и 100, поэтому нижняя граница исключительная, верхняя включительная. Для количества ракурсов (view) диапазоны 1-5 / 6-9 / 10-100 не перекрываются и обе границы включительные — иначе N=1 и N=6 не попали бы ни в один диапазон.",
-  "boundary": { "m2": "lowerExclusive", "view": "inclusive" },
+  "_comment": "Сроки производства по площади и количеству ракурсов.",
+  "boundary": {
+    "m2": "lowerExclusive",
+    "view": "inclusive"
+  },
   "services": {
-    "tech1":  { "unit": "m2", "tiers": [ { "min": 0, "max": 10, "days": 5 }, { "min": 10, "max": 100, "days": 10 }, { "min": 100, "max": 300, "days": 20 } ] },
-    "tech2":  { "unit": "m2", "tiers": [ { "min": 0, "max": 10, "days": 5 }, { "min": 10, "max": 100, "days": 10 }, { "min": 100, "max": 300, "days": 20 } ] },
-    "threeD": { "unit": "m2", "tiers": [ { "min": 0, "max": 10, "days": 5 }, { "min": 10, "max": 100, "days": 10 }, { "min": 100, "max": 300, "days": 20 } ] },
-    "table":  { "unit": "m2", "tiers": [ { "min": 0, "max": 10, "days": 5 }, { "min": 10, "max": 100, "days": 10 }, { "min": 100, "max": 300, "days": 20 } ] },
-    "twoD":   { "unit": "view", "tiers": [ { "min": 1, "max": 5, "days": 2 }, { "min": 6, "max": 9, "days": 5 }, { "min": 10, "max": 100, "days": 7 } ] }
+    "tech1": {
+      "unit": "m2",
+      "tiers": [
+        { "min": 0, "max": 20, "days": 5 },
+        { "min": 20, "max": 50, "days": 7 },
+        { "min": 50, "max": 80, "days": 9 },
+        { "min": 80, "max": 100, "days": 10 },
+        { "min": 100, "max": 150, "days": 12 },
+        { "min": 150, "max": 300, "days": 15 },
+        { "min": 300, "max": 500, "days": 20 },
+        { "min": 500, "max": 700, "days": 30 },
+        { "min": 700, "max": 900, "days": 35 },
+        { "min": 900, "max": 1200, "days": 40 }
+      ]
+    },
+
+    "tech2": {
+      "unit": "m2",
+      "tiers": [
+        { "min": 0, "max": 20, "days": 5 },
+        { "min": 20, "max": 50, "days": 7 },
+        { "min": 50, "max": 80, "days": 9 },
+        { "min": 80, "max": 100, "days": 10 },
+        { "min": 100, "max": 150, "days": 12 },
+        { "min": 150, "max": 300, "days": 15 },
+        { "min": 300, "max": 500, "days": 20 },
+        { "min": 500, "max": 700, "days": 30 },
+        { "min": 700, "max": 900, "days": 35 },
+        { "min": 900, "max": 1200, "days": 40 }
+      ]
+    },
+
+    "threeD": {
+      "unit": "m2",
+      "tiers": [
+        { "min": 0, "max": 20, "days": 7 },
+        { "min": 20, "max": 30, "days": 8 },
+        { "min": 30, "max": 40, "days": 9 },
+        { "min": 40, "max": 50, "days": 10 },
+        { "min": 50, "max": 60, "days": 12 },
+        { "min": 60, "max": 70, "days": 14 },
+        { "min": 70, "max": 80, "days": 15 },
+        { "min": 80, "max": 90, "days": 17 },
+        { "min": 90, "max": 100, "days": 20 },
+        { "min": 100, "max": 130, "days": 25 },
+        { "min": 130, "max": 170, "days": 40 },
+        { "min": 170, "max": 210, "days": 50 },
+        { "min": 210, "max": 250, "days": 55 },
+        { "min": 250, "max": 300, "days": 60 },
+        { "min": 300, "max": 600, "days": 65 },
+        { "min": 600, "max": 1200, "days": 75 }
+      ]
+    },
+
+    "table": {
+      "unit": "m2",
+      "tiers": [
+        { "min": 0, "max": 30, "days": 5 },
+        { "min": 30, "max": 50, "days": 7 },
+        { "min": 50, "max": 80, "days": 9 },
+        { "min": 80, "max": 100, "days": 10 },
+        { "min": 100, "max": 150, "days": 12 },
+        { "min": 150, "max": 300, "days": 15 },
+        { "min": 300, "max": 600, "days": 20 },
+        { "min": 600, "max": 1200, "days": 30 }
+      ]
+    },
+
+    "twoD": {
+      "unit": "view",
+      "tiers": [
+        { "min": 1, "max": 3, "days": 5 },
+        { "min": 4, "max": 5, "days": 7 },
+        { "min": 6, "max": 7, "days": 9 },
+        { "min": 8, "max": 9, "days": 11 },
+        { "min": 10, "max": 11, "days": 13 },
+        { "min": 12, "max": 13, "days": 15 },
+        { "min": 14, "max": 16, "days": 17 },
+        { "min": 17, "max": 18, "days": 19 },
+        { "min": 19, "max": 20, "days": 21 },
+        { "min": 21, "max": 22, "days": 23 }
+      ]
+    }
   }
 }
